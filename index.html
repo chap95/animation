@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <canvas
+      id="myCanvas"
+      width="200"
+      height="200"
+      style="border: 1px solid #000000"
+    >
+    </canvas>
+
+    <script>
+      var offset = 0;
+      var speed = 0;
+      var defaultPoint = 50;
+      function drawStroke() {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        speed = 3;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(defaultPoint + offset, defaultPoint + offset);
+        ctx.stroke();
+        console.log("point -> ", defaultPoint + offset);
+        if (defaultPoint + offset <= 150) {
+          offset += speed;
+        } else {
+          offset -= speed;
+        }
+        window.requestAnimationFrame(drawStroke);
+      }
+      window.requestAnimationFrame(drawStroke);
+    </script>
+  </body>
+</html>
