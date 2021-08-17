@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #myCanvas {
+        background: black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <script>
+      let word = "this text is for test";
+      let canvas = document.getElementById("myCanvas");
+      let ctx = canvas.getContext("2d");
+      let i = 1;
+      let char;
+      let fps = 100;
+
+      function typing() {
+        var num = Math.random();
+        var colorHex = Math.floor(num * 10000000).toString(16);
+        char = word.substr(0, i) + "_";
+        ctx.clearRect(0, 0, 500, 500);
+        ctx.fillStyle = `#${colorHex}`;
+        ctx.font = "16px sans-serif";
+        ctx.fillText(char, 30, 30);
+        if (i <= word.length) {
+          setTimeout(typing, fps);
+          i++;
+        }
+      }
+      typing();
+    </script>
+  </body>
+</html>
