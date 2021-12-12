@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <canvas
+      id="myCanvas"
+      width="500"
+      height="500"
+      style="border: 1px solid #000000"
+    >
+    </canvas>
+
+    <script>
+      // Let's draw square
+      var offset = 0;
+      var speed = 2;
+      var defaultPoint = 30;
+      var xPoint = 30;
+      var yPoint = 30;
+      var cycle = 0;
+      var offset = 10;
+      var requestId;
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.beginPath();
+      ctx.moveTo(xPoint, yPoint);
+      function drawStroke() {
+        // console.log(xPoint, yPoint);
+        if (cycle === 0) {
+          yPoint += speed;
+          ctx.lineTo(xPoint, yPoint);
+
+          if (yPoint >= offset + defaultPoint) {
+            cycle++;
+          }
+        }
+
+        if (cycle === 1) {
+          xPoint += speed;
+          ctx.lineTo(xPoint, yPoint);
+
+          if (xPoint >= offset + defaultPoint) {
+            cycle++;
+          }
+        }
+
+        if (cycle === 2) {
+          yPoint -= speed;
+          ctx.lineTo(xPoint, yPoint);
+          console.log(yPoint, defaultPoint);
+          if (yPoint <= defaultPoint) {
+            cycle++;
+          }
+        }
+
+        if (cycle === 3) {
+          xPoint -= speed;
+          ctx.lineTo(xPoint, yPoint);
+
+          if (xPoint <= defaultPoint) {
+            cycle++;
+          }
+        }
+
+        if (cycle > 3) {
+          ctx.fill();
+          window.cancelAnimationFrame(requestId);
+          requestId = undefined;
+        } else {
+          requestId = window.requestAnimationFrame(drawStroke);
+        }
+        ctx.stroke();
+      }
+      window.requestAnimationFrame(drawStroke);
+    </script>
+  </body>
+</html>
