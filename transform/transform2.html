@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transform2</title>
+
+  <style>
+    .canvas {
+      background-color:#ddd0d0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Transform2</h1>
+  <canvas class="canvas" width="500" height="500"></canvas>
+
+  <script>
+    const canvas = document.querySelector('.canvas');
+    const ctx = canvas.getContext('2d');
+    let scaleValue = 1;
+    let rotationValue = 0;
+    let rotationDirection = 1;
+    let rectWidth = 100;
+    let rectHeight = 100;
+    function toRadian(degree) {
+      return degree * Math.PI/180;
+    }
+    console.log(ctx);
+    function draw() {
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      ctx.save();
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.translate(250,250);
+      ctx.scale(scaleValue,scaleValue);
+      ctx.rotate(toRadian(rotationValue));
+      // console.log(ctx.canvas.clientWidth);
+      if(rotationValue < 50 ){
+        rotationDirection = -1;
+      }
+      rotationValue += 2 * rotationDirection;
+      scaleValue -= 0.05;
+
+      // console.log(scaleValue);
+      ctx.strokeRect(-50,-50,100,100);
+      ctx.restore();
+      requestAnimationFrame(draw);
+    }
+    canvas.addEventListener('click', () => {
+      
+    })
+
+    draw();  
+    </script>
+</body>
+</html>
