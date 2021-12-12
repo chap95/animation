@@ -14,20 +14,24 @@
       var offset = 0;
       var speed = 0;
       var defaultPoint = 50;
+      var direction = 1;
+      let timerId;
       function drawStroke() {
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        speed = 3;
-        ctx.moveTo(0, 0);
-        ctx.lineTo(defaultPoint + offset, defaultPoint + offset);
+        speed = 2;
+
+        ctx.beginPath();
+        ctx.clearRect(0, 0 ,canvas.width, canvas.height);
+        ctx.arc(offset, 150, 10, 0, Math.PI*2, false);
         ctx.stroke();
-        console.log("point -> ", defaultPoint + offset);
-        if (defaultPoint + offset <= 150) {
-          offset += speed;
-        } else {
-          offset -= speed;
+        offset += speed * direction;
+
+        timerId = window.requestAnimationFrame(drawStroke);
+
+        if(offset >= canvas.width - 10) {
+          cancelAnimationFrame(timerId);
         }
-        window.requestAnimationFrame(drawStroke);
       }
       window.requestAnimationFrame(drawStroke);
     </script>
