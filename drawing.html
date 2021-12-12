@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .color-button {
+        border: 1px solid black;
+        background-color: white;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Canvas</h1>
+    <p id="current-color">현재 색상 : </p>
+    <canvas
+      id="myCanvas"
+      width="200"
+      height="200"
+      style="border: 1px solid #000000"
+    >
+    </canvas>
+
+    <div class="color-selector">
+      <button class="color-button" name="black">
+
+      </button>
+      <button class="color-button" name="blue">
+
+      </button>
+
+      <button class="color-button" name="red">
+
+      </button>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      let drawingMode;
+      let ctxColor = 'black';
+      function downHandler() {
+        drawingMode = true;
+      }
+
+      function upHandler() {
+        drawingMode = false;
+      }
+
+      function clickHandler(e) {
+        if(!drawingMode) return;
+        const x = e.offsetX;
+        const y = e.offsetY;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI*2, false);
+        ctx.fillStyle = ctxColor;
+        ctx.fill();
+      }
+
+      canvas.addEventListener('mousedown', downHandler);
+      canvas.addEventListener('mousemove', clickHandler);
+      canvas.addEventListener('mouseup', upHandler);
+
+      const colorButtons = document.getElementsByClassName('color-button');
+      Object.values(colorButtons).map(button => {
+        const {name} = button;
+        button.style.backgroundColor = name;
+        button.addEventListener('click', () => {
+          ctxColor = name;
+        })
+      })
+    </script>
+  </body>
+</html>
