@@ -10,12 +10,17 @@
     .canvas {
       background-color:#ddd0d0;
     }
+
+    .canvas-test {
+      border: 1px solid palegreen;
+    }
   </style>
 </head>
 <body>
   <h1>Transform2</h1>
   <canvas class="canvas" width="500" height="500"></canvas>
-
+  <br />
+  <canvas class="canvas-test" width="300" height="300"></canvas>
   <script>
     const canvas = document.querySelector('.canvas');
     const ctx = canvas.getContext('2d');
@@ -29,7 +34,7 @@
     }
     console.log(ctx);
     function draw() {
-      ctx.clearRect(0,0,canvas.width, canvas.height);
+      // ctx.clearRect(0,0,canvas.width, canvas.height);
       ctx.save();
       ctx.setTransform(1,0,0,1,0,0);
       ctx.translate(250,250);
@@ -52,6 +57,13 @@
     })
 
     draw();  
+    </script>
+
+    <script>
+      const canvasTest = document.querySelector('.canvas-test');
+      const contextTest = canvasTest.getContext('2d');
+
+
     </script>
 </body>
 </html>

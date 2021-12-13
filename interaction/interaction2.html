@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interaction2</title>
+
+    <style>
+      .canvas {
+        background-color: palegoldenrod;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Interaction2</h1>
+    <canvas class="canvas" width="500" height="500"></canvas>
+
+    <script>
+      const canvas = document.querySelector('.canvas');
+      const context = canvas.getContext('2d');
+      context.font = '30px bold sans-serif';
+      const boxes = [];
+      const mousePos = {
+        x: 0,
+        y: 0,
+      };
+
+      class Box {
+        width = 100;
+        height = 100;
+        constructor(x, y, movement, index) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.movement = movement;
+          this.draw();
+        }
+
+        draw() {
+          context.fillStyle = 'rgba(0,0,0,0.5)';
+          context.fillRect(this.x, this.y, this.width, this.height);
+          context.fillStyle = 'white';
+          context.fillText(this.index, this.x + 30, this.y + 30);
+        }
+      }
+
+      function render() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        let box;
+        for (let i = 0; i < boxes.length; i++) {
+          box = boxes[i];
+          box.x += box.movement;
+          box.draw();
+
+          if (box.x > canvas.width) {
+            box.x = -100;
+          }
+        }
+        requestAnimationFrame(render);
+      }
+
+      let tempX;
+      let tempY;
+      let movement;
+      for (let i = 0; i < 10; i++) {
+        tempX = Math.random() * canvas.clientWidth * 0.8;
+        tempY = Math.random() * canvas.clientHeight * 0.8;
+        movemet = parseInt(Math.random() * 10);
+        console.log(movemet);
+        boxes.push(new Box(tempX, tempY, movemet, i + 1));
+      }
+
+      canvas.addEventListener('click', (e) => {
+        mousePos.x = e.layerX;
+        mousePos.y = e.layerY;
+        let clickedIndex = 0;
+        for (let i = 0; i < 10; i++) {
+          const box = boxes[i];
+          const mX = mousePos.x;
+          const mY = mousePos.y;
+
+          if (
+            mX >= box.x &&
+            mX <= box.x + box.width &&
+            mY >= box.y &&
+            mY <= box.y + box.height
+          ) {
+            clickedIndex = i;
+          }
+        }
+
+        if (clickedIndex > 0) {
+          console.log(`${clickedIndex + 1} 박스가 클릭 됨!!`);
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
