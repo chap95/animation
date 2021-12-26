@@ -17,6 +17,7 @@
     <canvas class="canvas" width="600" height="400"></canvas>
     <script src="box.js"></script>
     <script src="panel.js"></script>
+    <script src="utility.js"></script>
     <script>
       const canvas = document.querySelector('.canvas');
       const context = canvas.getContext('2d');
@@ -26,6 +27,7 @@
       let step; // aplication state, it has 1 to 4
       const boxes = [];
       let panel;
+      let requestAnimationFrameId;
       const mousePos = {
         x: 0,
         y: 0,
@@ -36,11 +38,6 @@
         let box;
         for (let i = 0; i < boxes.length; i++) {
           box = boxes[i];
-          // box.x += box.movement;
-
-          // if (box.x > canvas.width) {
-          //   box.x = -100;
-          // }
           box.draw();
         }
         switch (step) {
@@ -52,13 +49,17 @@
                 box.x = -100;
               }
             }
-            panel.scale = 0;
+
             break;
 
           case 2:
-            panel.scale += 0.02;
+            // panel.scale += 0.02;
+            panel.scale = panel.scale + (1 - panel.scale) * 0.1;
+            panel.angle = panel.scale * 720;
             panel.draw();
-            if (panel.scale >= 1) {
+            if (panel.scale >= 0.999) {
+              panel.scale = 1;
+              panel.angle = 720;
               step = 3;
             }
             break;
@@ -68,9 +69,13 @@
             panel.showContent();
             break;
         }
+        console.log('render!!');
+        requestAnimationFrameId = requestAnimationFrame(render);
 
-        // panel.draw();
-        requestAnimationFrame(render);
+        if (step === 3) {
+          panel.showContent();
+          cancelAnimationFrame(requestAnimationFrameId);
+        }
       }
 
       let tempX;
@@ -118,7 +123,9 @@
           step = 2;
           console.log(`${clickedIndex + 1} 박스가 클릭 됨!!`);
         } else if (step === 3) {
+          panel.scale = 0;
           step = 1;
+          render();
         }
       });
       init();

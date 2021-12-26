@@ -1,6 +1,7 @@
 class Panel {
   constructor(scale) {
     this.scale = 0;
+    this.angle = 0;
   }
 
   draw() {
@@ -10,6 +11,7 @@ class Panel {
     context.resetTransform();
     context.translate(canvasWidth, canvasHeight);
     context.scale(this.scale, this.scale);
+    context.rotate(util.toRadian(this.angle));
     context.translate(-canvasWidth, -canvasHeight);
     context.fillRect(canvasWidth - panelWidth / 2, canvasHeight - panelHeight / 2, panelWidth ,panelHeight);
     context.resetTransform();
