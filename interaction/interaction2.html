@@ -14,61 +14,84 @@
   </head>
   <body>
     <h1>Interaction2</h1>
-    <canvas class="canvas" width="500" height="500"></canvas>
-
+    <canvas class="canvas" width="600" height="400"></canvas>
+    <script src="box.js"></script>
+    <script src="panel.js"></script>
     <script>
       const canvas = document.querySelector('.canvas');
       const context = canvas.getContext('2d');
       context.font = '30px bold sans-serif';
+      let canvasWidth;
+      let canvasHeight;
+      let step; // aplication state, it has 1 to 4
       const boxes = [];
+      let panel;
       const mousePos = {
         x: 0,
         y: 0,
       };
-
-      class Box {
-        width = 100;
-        height = 100;
-        constructor(x, y, movement, index) {
-          this.index = index;
-          this.x = x;
-          this.y = y;
-          this.movement = movement;
-          this.draw();
-        }
-
-        draw() {
-          context.fillStyle = 'rgba(0,0,0,0.5)';
-          context.fillRect(this.x, this.y, this.width, this.height);
-          context.fillStyle = 'white';
-          context.fillText(this.index, this.x + 30, this.y + 30);
-        }
-      }
 
       function render() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         let box;
         for (let i = 0; i < boxes.length; i++) {
           box = boxes[i];
-          box.x += box.movement;
-          box.draw();
+          // box.x += box.movement;
 
-          if (box.x > canvas.width) {
-            box.x = -100;
-          }
+          // if (box.x > canvas.width) {
+          //   box.x = -100;
+          // }
+          box.draw();
         }
+        switch (step) {
+          case 1:
+            for (let i = 0; i < boxes.length; i++) {
+              box = boxes[i];
+              box.x += box.movement;
+              if (box.x > canvas.width) {
+                box.x = -100;
+              }
+            }
+            panel.scale = 0;
+            break;
+
+          case 2:
+            panel.scale += 0.02;
+            panel.draw();
+            if (panel.scale >= 1) {
+              step = 3;
+            }
+            break;
+
+          case 3:
+            panel.draw();
+            panel.showContent();
+            break;
+        }
+
+        // panel.draw();
         requestAnimationFrame(render);
       }
 
       let tempX;
       let tempY;
       let movement;
-      for (let i = 0; i < 10; i++) {
-        tempX = Math.random() * canvas.clientWidth * 0.8;
-        tempY = Math.random() * canvas.clientHeight * 0.8;
-        movemet = parseInt(Math.random() * 10);
-        console.log(movemet);
-        boxes.push(new Box(tempX, tempY, movemet, i + 1));
+      let selectedBoxIndex;
+
+      function init() {
+        step = 1;
+        canvasWidth = canvas.width * 0.5;
+        canvasHeight = canvas.height * 0.5;
+        for (let i = 0; i < 10; i++) {
+          tempX = Math.random() * canvas.clientWidth * 0.8;
+          tempY = Math.random() * canvas.clientHeight * 0.8;
+          movemet = parseInt(Math.random() * 10);
+          console.log(movemet);
+          boxes.push(new Box(tempX, tempY, movemet, i + 1));
+        }
+
+        panel = new Panel();
+        render();
       }
 
       canvas.addEventListener('click', (e) => {
@@ -90,12 +113,15 @@
           }
         }
 
-        if (clickedIndex > 0) {
+        if (step === 1 && clickedIndex > 0) {
+          selectedBoxIndex = clickedIndex;
+          step = 2;
           console.log(`${clickedIndex + 1} 박스가 클릭 됨!!`);
+        } else if (step === 3) {
+          step = 1;
         }
       });
-
-      render();
+      init();
     </script>
   </body>
 </html>
